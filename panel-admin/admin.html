@@ -86,10 +86,257 @@
                 </button>
             </section>
 
-            <footer class="visually-hidden">Panel administrativo de Kuro & Sésamo</footer>
+            <!-- Mensajes de confirmación, error o validación -->
+            <div id="alertaContainer"></div>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="js/admin.js"></script>
+            <!-- Título principal y acciones -->
+            <section class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+                <div>
+                    <p class="eyebrow-text mb-1">CONSOLA MAESTRA • <span id="subtituloTotal">0 recetas
+                            registradas</span></p>
+                    <h2 class="page-title mb-1">Gestión de Recetas</h2>
+                    <p class="text-muted mb-0">Administra las recetas que se muestran en la página pública de Kuro &
+                        Sésamo.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button id="btnSincronizar" class="btn btn-outline-kuro" type="button">
+                        <i class="bi bi-arrow-repeat me-1"></i>Sincronizar API
+                    </button>
+                    <button id="btnNuevaReceta" class="btn btn-primary-kuro" type="button">
+                        <i class="bi bi-plus-circle me-1"></i>Nueva Receta (+)
+                    </button>
+                </div>
+            </section>
+
+            <!-- Indicadores rápidos -->
+            <section class="row g-3 mb-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="kpi-card p-3 p-lg-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="kpi-label">TOTAL RECETAS</span>
+                            <span class="kpi-icon bg-primary-soft text-primary-kuro"><i class="bi bi-book"></i></span>
+                        </div>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="kpi-value" id="kpiTotal">0</span>
+                            <small class="text-muted">en catálogo</small>
+                        </div>
+                        <div class="kpi-bar mt-3">
+                            <div class="kpi-bar-fill bg-primary-kuro" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="kpi-card p-3 p-lg-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="kpi-label">PAÍS PREDOMINANTE</span>
+                            <span class="kpi-icon bg-secondary-soft text-secondary-kuro"><i
+                                    class="bi bi-flag"></i></span>
+                        </div>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="kpi-value fs-3" id="kpiPais">—</span>
+                            <small class="text-muted" id="kpiPaisDetalle"></small>
+                        </div>
+                        <div class="kpi-bar mt-3">
+                            <div class="kpi-bar-fill bg-secondary-kuro" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="kpi-card p-3 p-lg-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="kpi-label">TIEMPO PROMEDIO</span>
+                            <span class="kpi-icon bg-neutral-soft text-dark"><i class="bi bi-clock"></i></span>
+                        </div>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="kpi-value" id="kpiTiempo">0</span>
+                            <small class="text-muted">minutos / plato</small>
+                        </div>
+                        <small class="text-muted d-block mt-2"><i class="bi bi-lightning-charge me-1"></i>Preparación
+                            estimada</small>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="kpi-card p-3 p-lg-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="kpi-label">SERVIDOR BACKEND</span>
+                            <span class="kpi-icon bg-tertiary-soft text-tertiary-kuro"><i
+                                    class="bi bi-server"></i></span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <span class="status-dot" id="serverStatusDot"></span>
+                            <span class="fw-bold fs-5" id="serverStatusText">Conectando...</span>
+                        </div>
+                        <small class="text-muted d-block mt-2" id="serverLatencyText">JSON Server REST</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filtros y cambio de vista -->
+            <section class="panel-box p-3 mb-4">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-cream border-end-0"><i
+                                    class="bi bi-search text-muted"></i></span>
+                            <label for="inputBuscar" class="visually-hidden">Buscar receta</label>
+                            <input type="text" id="inputBuscar" class="form-control bg-cream border-start-0"
+                                placeholder="Filtrar por título, país o dificultad...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filtroPais" class="visually-hidden">Filtrar por país</label>
+                        <select id="filtroPais" class="form-select bg-cream">
+                            <option value="TODOS">Todos los países</option>
+                            <option value="Japón">Japón</option>
+                            <option value="Tailandia">Tailandia</option>
+                            <option value="Corea del Sur">Corea del Sur</option>
+                            <option value="China">China</option>
+                            <option value="Vietnam">Vietnam</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-md-end align-items-center gap-2">
+                        <small class="text-muted me-2" id="textoMostrando">Mostrando 0 de 0</small>
+                        <div class="btn-group" role="group" aria-label="Cambiar vista">
+                            <button type="button" class="btn btn-sm btn-view active" id="btnVistaTabla">
+                                <i class="bi bi-table me-1"></i>Tabla
+                            </button>
+                            <button type="button" class="btn btn-sm btn-view" id="btnVistaTarjetas">
+                                <i class="bi bi-grid me-1"></i>Tarjetas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabla de registros -->
+            <section id="contenedorTabla" class="panel-box overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>PLATO / IDENTIDAD</th>
+                                <th>PAÍS DE ORIGEN</th>
+                                <th>TIEMPO PREP.</th>
+                                <th>DIFICULTAD</th>
+                                <th>ESTADO</th>
+                                <th class="text-end">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaRecetasBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Vista alternativa en tarjetas -->
+            <section id="contenedorTarjetas" class="row g-3 d-none"></section>
+        </main>
+    </div>
+
+    <!-- Modal de formulario para crear o editar -->
+    <div class="modal fade" id="recetaModal" tabindex="-1" aria-labelledby="recetaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-cream border-bottom">
+                    <div>
+                        <small class="eyebrow-text d-block">FORMULARIO EDITORIAL</small>
+                        <h5 class="modal-title page-title fs-4" id="recetaModalLabel">Nueva Receta</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <form id="recetaForm" novalidate>
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="recetaId">
+
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="titulo" class="form-label fw-semibold">Título de la Receta *</label>
+                                <input type="text" class="form-control" id="titulo"
+                                    placeholder="Ej. Ramen Tonkotsu Clásico" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="pais" class="form-label fw-semibold">País de Origen *</label>
+                                <select class="form-select" id="pais" required>
+                                    <option value="">Selecciona...</option>
+                                    <option value="Japón">Japón</option>
+                                    <option value="Tailandia">Tailandia</option>
+                                    <option value="Corea del Sur">Corea del Sur</option>
+                                    <option value="China">China</option>
+                                    <option value="Vietnam">Vietnam</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="tiempo" class="form-label fw-semibold">Tiempo de Prep. (min) *</label>
+                                <input type="number" class="form-control" id="tiempo" min="1" max="600"
+                                    placeholder="Ej. 45" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="dificultad" class="form-label fw-semibold">Dificultad *</label>
+                                <select class="form-select" id="dificultad" required>
+                                    <option value="Fácil">Fácil</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Intermedia">Intermedia</option>
+                                    <option value="Avanzada">Avanzada</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="estado" class="form-label fw-semibold">Estado *</label>
+                                <select class="form-select" id="estado" required>
+                                    <option value="Publicado">Publicado</option>
+                                    <option value="Borrador">Borrador</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="imagen" class="form-label fw-semibold">URL de Imagen (Opcional)</label>
+                                <input type="url" class="form-control" id="imagen"
+                                    placeholder="https://ejemplo.com/foto-plato.jpg">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="descripcion" class="form-label fw-semibold">Descripción Breve *</label>
+                                <textarea class="form-control" id="descripcion" rows="3"
+                                    placeholder="Ingredientes clave, técnica de cocción y notas de sabor..."
+                                    required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer bg-cream border-top">
+                        <button type="button" class="btn btn-outline-kuro" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-kuro" id="btnGuardarReceta">
+                            <i class="bi bi-check2-circle me-1"></i>Guardar Receta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de vista rápida -->
+    <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleTitulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-cream">
+                    <h5 class="modal-title page-title fs-5" id="detalleTitulo">Detalle de Receta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" id="detalleContenido"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="visually-hidden">Panel administrativo de Kuro & Sésamo</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 
 </html>
