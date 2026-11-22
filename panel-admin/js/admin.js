@@ -228,3 +228,170 @@ async function eliminarReceta(id) {
         mostrarAlerta(`Error al eliminar la receta: ${error.message}`, "danger");
     }
 }
+
+
+
+
+
+// Filtra por texto y por país antes de pintar en pantalla
+function aplicarFiltrosYRenderizar() {
+    const texto = inputBuscar.value.trim().toLowerCase();
+    const paisSeleccionado = filtroPais.value;
+
+    const filtradas = recetasCache.filter((receta) => {
+        const coincideTexto =
+            receta.titulo.toLowerCase().includes(texto) ||
+            receta.pais.toLowerCase().includes(texto) ||
+            receta.dificultad.toLowerCase().includes(texto);
+
+        const coincidePais = paisSeleccionado === "TODOS" || receta.pais === paisSeleccionado;
+        return coincideTexto && coincidePais;
+    });
+
+    textoMostrando.textContent = `Mostrando ${filtradas.length} de ${recetasCache.length}`;
+    renderizarTabla(filtradas);
+    renderizarTarjetas(filtradas);
+}
+
+// Dibuja las filas de la tabla principal
+function renderizarTabla(lista) {
+    tablaRecetasBody.innerHTML = "";
+
+    if (lista.length === 0) {
+        tablaRecetasBody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center py-5 text-muted">
+          No hay recetas que coincidan con el filtro.
+        </td>
+      </tr>
+    `;
+        return;
+    }
+
+    lista.forEach((receta) => {
+        const badgeEstado =
+            receta.estado === "Publicado"
+                ? `<span class="badge rounded-pill badge-estado-pub">• Publicado</span>`
+                : `<span class="badge rounded-pill badge-estado-borr">• Borrador</span>`;
+
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+      <td>
+        <div class="d-flex align-items-center gap-3">
+          <img src="${receta.imagen || IMAGEN_POR_DEFECTO}" alt="${receta.titulo}" class="recipe-thumb">
+          <div>
+            <div class="fw-bold" style="font-family: 'Noto Serif', serif;">${receta.titulo}</div>
+            <div class="text-muted small text-truncate" style="max-width: 260px;">${receta.descripcion}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge rounded-pill badge-pais">• ${receta.pais}</span></td>
+      <td><span class="badge rounded-pill badge-tiempo"><i class="bi bi-clock me-1"></i>${receta.tiempo} min</span></td>
+      <td><span class="badge bg-light text-dark border">${receta.dificultad}</span></td>
+      <td>${badgeEstado}</td>
+      <td class="text-end text-nowrap">
+        <button class="btn btn-sm btn-link text-dark p-1" type="button" onclick="verDetalle('${receta.id}')" title="Ver detalle">
+          <i class="bi bi-eye"></i>
+        </button>
+        <button class="btn btn-sm btn-link text-secondary-kuro p-1" type="button" onclick="abrirModalEditar('${receta.id}')" title="Editar">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-link text-danger-custom p-1" type="button" onclick="eliminarReceta('${receta.id}')" title="Eliminar">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    `;
+        tablaRecetasBody.appendChild(fila);
+    });
+}
+
+// Dibuja las recetas en formato de tarjetas
+function renderizarTarjetas(lista) {
+    contenedorTarjetas.innerHTML = "";
+
+    lista.forEach((receta) => {
+        const columna = document.createElement("div");
+        columna.className = "col-md-6 col-xl-3";
+        columna.innerHTML = `
+      <div class="kpi-card overflow-hidden h-100 d-flex flex-column">
+        <img src="${receta.imagen || IMAGEN_POR_DEFECTO}" alt="${receta.titulo}" style="height: 150px; object-fit: cover;">
+        <div class="p-3 flex-grow-1 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="badge rounded-pill badge-pais">${receta.pais}</span>
+              <span class="badge rounded-pill badge-tiempo">${receta.tiempo} min</span>
+            </div>
+            <h6 class="page-title fw-bold">${receta.titulo}</h6>
+            <p class="text-muted small mb-3">${receta.descripcion}</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top border-subtle">
+            <span class="small fw-semibold">${receta.dificultad}</span>
+            <div>
+              <button class="btn btn-sm btn-outline-secondary me-1" type="button" onclick="abrirModalEditar('${receta.id}')"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" type="button" onclick="eliminarReceta('${receta.id}')"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+        contenedorTarjetas.appendChild(columna);
+    });
+}
+
+// Muestra la información completa de una receta en un modal
+function verDetalle(id) {
+    const receta = recetasCache.find((item) => String(item.id) === String(id));
+    if (!receta) return;
+
+    document.getElementById("detalleTitulo").textContent = receta.titulo;
+    document.getElementById("detalleContenido").innerHTML = `
+    <img src="${receta.imagen || IMAGEN_POR_DEFECTO}" alt="${receta.titulo}" class="img-fluid rounded-3 mb-3 w-100" style="max-height: 220px; object-fit: cover;">
+    <div class="d-flex gap-2 mb-3">
+      <span class="badge rounded-pill badge-pais">${receta.pais}</span>
+      <span class="badge rounded-pill badge-tiempo">${receta.tiempo} min</span>
+      <span class="badge bg-light text-dark border">${receta.dificultad}</span>
+    </div>
+    <p class="text-muted mb-0">${receta.descripcion}</p>
+  `;
+    detalleModal.show();
+}
+
+// Eventos de botones, filtros y cambio de vista
+document.getElementById("btnNuevaReceta").addEventListener("click", abrirModalCrear);
+document.getElementById("navCrearBtn").addEventListener("click", abrirModalCrear);
+document.getElementById("btnSincronizar").addEventListener("click", () => cargarRecetas(true));
+
+inputBuscar.addEventListener("input", aplicarFiltrosYRenderizar);
+filtroPais.addEventListener("change", aplicarFiltrosYRenderizar);
+
+const btnVistaTabla = document.getElementById("btnVistaTabla");
+const btnVistaTarjetas = document.getElementById("btnVistaTarjetas");
+
+btnVistaTabla.addEventListener("click", () => {
+    vistaActual = "tabla";
+    btnVistaTabla.classList.add("active");
+    btnVistaTarjetas.classList.remove("active");
+    contenedorTabla.classList.remove("d-none");
+    contenedorTarjetas.classList.add("d-none");
+});
+
+btnVistaTarjetas.addEventListener("click", () => {
+    vistaActual = "tarjetas";
+    btnVistaTarjetas.classList.add("active");
+    btnVistaTabla.classList.remove("active");
+    contenedorTarjetas.classList.remove("d-none");
+    contenedorTabla.classList.add("d-none");
+});
+
+// Borra los datos de sesión y regresa al inicio de sesión
+function cerrarSesion() {
+    sessionStorage.removeItem("sesionActiva");
+    sessionStorage.removeItem("adminSession");
+    window.location.href = "login.html";
+}
+
+document.getElementById("btnCerrarSesionSidebar").addEventListener("click", cerrarSesion);
+document.getElementById("btnCerrarSesionTop").addEventListener("click", cerrarSesion);
+
+// Carga inicial al abrir el documento
+document.addEventListener("DOMContentLoaded", () => cargarRecetas(false));
