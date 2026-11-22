@@ -127,3 +127,104 @@ async function cargarRecetas(notificar = false) {
         mostrarAlerta(`No se pudieron cargar las recetas: ${error.message}`, "danger");
     }
 }
+
+// Envía el formulario para crear una receta (POST) o actualizarla (PUT)
+recetaForm.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const id = recetaIdInput.value;
+    const titulo = tituloInput.value.trim();
+    const pais = paisInput.value.trim();
+    const tiempo = Number(tiempoInput.value);
+    const dificultad = dificultadInput.value;
+    const estado = estadoInput.value;
+    const imagen = imagenInput.value.trim() || IMAGEN_POR_DEFECTO;
+    const descripcion = descripcionInput.value.trim();
+
+    // Valida que los campos obligatorios no estén vacíos y que el tiempo sea válido
+    if (!titulo || !pais || !tiempo || tiempo <= 0 || !descripcion) {
+        mostrarAlerta("Completa todos los campos obligatorios (*) y asegúrate de ingresar un tiempo mayor a 0.", "warning");
+        return;
+    }
+
+    const payload = { titulo, pais, tiempo, dificultad, estado, imagen, descripcion };
+
+    try {
+        const url = id ? `${API_URL}/${id}` : API_URL;
+        const metodo = id ? "PUT" : "POST";
+
+        const respuesta = await fetch(url, {
+            method: metodo,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudo guardar el cambio en el servidor.");
+        }
+
+        recetaModal.hide();
+        recetaForm.reset();
+        mostrarAlerta(
+            id ? "Receta actualizada correctamente." : "Receta creada con éxito.",
+            "success"
+        );
+        await cargarRecetas();
+    } catch (error) {
+        mostrarAlerta(`Error al guardar la receta: ${error.message}`, "danger");
+    }
+});
+
+// Abre el modal limpio para registrar una nueva receta
+function abrirModalCrear() {
+    recetaForm.reset();
+    recetaIdInput.value = "";
+    recetaModalLabel.textContent = "Nueva Receta";
+    recetaModal.show();
+}
+
+// Consulta una receta por ID y llena el formulario para editarla
+async function abrirModalEditar(id) {
+    try {
+        const respuesta = await fetch(`${API_URL}/${id}`);
+        if (!respuesta.ok) {
+            throw new Error("No se encontró la receta seleccionada.");
+        }
+
+        const receta = await respuesta.json();
+        recetaIdInput.value = receta.id;
+        tituloInput.value = receta.titulo;
+        paisInput.value = receta.pais;
+        tiempoInput.value = receta.tiempo;
+        dificultadInput.value = receta.dificultad;
+        estadoInput.value = receta.estado || "Publicado";
+        imagenInput.value = receta.imagen || "";
+        descripcionInput.value = receta.descripcion;
+
+        recetaModalLabel.textContent = "Editar Receta";
+        recetaModal.show();
+    } catch (error) {
+        mostrarAlerta(`Error al cargar la receta para editar: ${error.message}`, "danger");
+    }
+}
+
+// Elimina un registro de JSON Server mediante DELETE
+async function eliminarReceta(id) {
+    const confirmar = confirm("¿Seguro que deseas eliminar esta receta?");
+    if (!confirmar) return;
+
+    try {
+        const respuesta = await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudo eliminar la receta.");
+        }
+
+        mostrarAlerta("Receta eliminada correctamente.", "success");
+        await cargarRecetas();
+    } catch (error) {
+        mostrarAlerta(`Error al eliminar la receta: ${error.message}`, "danger");
+    }
+}
