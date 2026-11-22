@@ -1,0 +1,331 @@
+/* Variables con los colores principales y fondos del diseño */
+:root {
+    --kuro-primary: #B22222;
+    --kuro-primary-hover: #921919;
+    --kuro-secondary: #E08A1E;
+    --kuro-tertiary: #4A6B48;
+    --kuro-neutral: #1F1914;
+    --kuro-bg: #FAF5F0;
+    --kuro-surface: #FFFFFF;
+    --kuro-cream: #F5EDE6;
+    --kuro-border: #E8DDD3;
+}
+
+/* Estilo base del cuerpo y fuente de lectura */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--kuro-bg);
+    color: var(--kuro-neutral);
+}
+
+/* Fuente serif para títulos y números destacados */
+.brand-title,
+.page-title,
+.kpi-value {
+    font-family: 'Noto Serif', serif;
+    color: var(--kuro-neutral);
+}
+
+/* Barra lateral fija en escritorio */
+.sidebar {
+    width: 260px;
+    min-width: 260px;
+    background-color: var(--kuro-cream);
+    border-right: 1px solid var(--kuro-border);
+}
+
+/* Ajuste responsivo para tablets y celulares */
+@media (max-width: 991.98px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--kuro-border);
+    }
+}
+
+/* Cuadro del logotipo en el menú lateral */
+.brand-badge {
+    width: 42px;
+    height: 42px;
+    background-color: var(--kuro-primary);
+    color: #FFFFFF;
+    border-radius: 10px;
+    font-family: 'Noto Serif', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Nombre de la marca en el panel */
+.brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+/* Subtítulo superior en rojo de marca */
+.brand-subtitle {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--kuro-primary);
+    font-weight: 700;
+}
+
+/* Enlaces y botones del menú lateral */
+.sidebar .nav-link {
+    color: #5C524A;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    transition: all 0.2s ease;
+}
+
+/* Resalta el enlace activo o al pasar el cursor */
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: var(--kuro-surface);
+    color: var(--kuro-neutral);
+    box-shadow: 0 2px 6px rgba(31, 25, 20, 0.05);
+}
+
+/* Etiquetas pequeñas en mayúsculas */
+.eyebrow-text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--kuro-primary);
+}
+
+/* Etiqueta superior de administración */
+.top-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #6B5E54;
+}
+
+/* Bordes suaves consistentes con el diseño */
+.border-subtle {
+    border-color: var(--kuro-border) !important;
+}
+
+/* Fondo crema para encabezados y filtros */
+.bg-cream {
+    background-color: var(--kuro-cream) !important;
+}
+
+/* Franja informativa de sesión activa */
+.session-banner {
+    background-color: var(--kuro-cream);
+    border: 1px solid var(--kuro-border);
+}
+
+/* Colores utilitarios de texto y fondo */
+.text-primary-kuro {
+    color: var(--kuro-primary) !important;
+}
+
+.text-secondary-kuro {
+    color: var(--kuro-secondary) !important;
+}
+
+.text-tertiary-kuro {
+    color: var(--kuro-tertiary) !important;
+}
+
+.text-success-custom {
+    color: var(--kuro-tertiary) !important;
+}
+
+.text-danger-custom {
+    color: var(--kuro-primary) !important;
+}
+
+.bg-primary-kuro {
+    background-color: var(--kuro-primary) !important;
+}
+
+.bg-secondary-kuro {
+    background-color: var(--kuro-secondary) !important;
+}
+
+/* Botón principal en rojo de marca */
+.btn-primary-kuro {
+    background-color: var(--kuro-primary);
+    border-color: var(--kuro-primary);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.1rem;
+}
+
+/* Oscurece el botón principal al pasar el cursor */
+.btn-primary-kuro:hover {
+    background-color: var(--kuro-primary-hover);
+    border-color: var(--kuro-primary-hover);
+    color: #FFFFFF;
+}
+
+/* Botón secundario con borde crema */
+.btn-outline-kuro {
+    background-color: var(--kuro-surface);
+    border: 1px solid var(--kuro-border);
+    color: var(--kuro-neutral);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Fondo crema al pasar el cursor sobre botón secundario */
+.btn-outline-kuro:hover {
+    background-color: var(--kuro-cream);
+}
+
+/* Tarjetas de indicadores y contenedores de tabla */
+.kpi-card,
+.panel-box {
+    background-color: var(--kuro-surface);
+    border: 1px solid var(--kuro-border);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(31, 25, 20, 0.03);
+}
+
+/* Título superior de cada indicador */
+.kpi-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #7A6E65;
+}
+
+/* Número grande de cada indicador */
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+/* Ícono circular o cuadrado suave en las tarjetas */
+.kpi-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fondos suaves para íconos de indicadores */
+.bg-primary-soft {
+    background-color: rgba(178, 34, 34, 0.12);
+}
+
+.bg-secondary-soft {
+    background-color: rgba(224, 138, 30, 0.14);
+}
+
+.bg-tertiary-soft {
+    background-color: rgba(74, 107, 72, 0.14);
+}
+
+.bg-neutral-soft {
+    background-color: rgba(31, 25, 20, 0.08);
+}
+
+/* Barra inferior decorativa de los indicadores */
+.kpi-bar {
+    height: 4px;
+    background-color: var(--kuro-cream);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Relleno de la barra indicadora */
+.kpi-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+}
+
+/* Punto indicador de estado del servidor */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--kuro-tertiary);
+    display: inline-block;
+}
+
+/* Punto rojo cuando no hay conexión con JSON Server */
+.status-dot.offline {
+    background-color: var(--kuro-primary);
+}
+
+/* Encabezados de la tabla de recetas */
+.table thead th {
+    background-color: var(--kuro-cream);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: #6B5E54;
+    border-bottom: 1px solid var(--kuro-border);
+    padding: 0.9rem 1rem;
+}
+
+/* Celdas de las filas de recetas */
+.table tbody td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--kuro-border);
+}
+
+/* Miniatura cuadrada de la receta en la tabla */
+.recipe-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--kuro-border);
+}
+
+/* Etiqueta para el país de origen */
+.badge-pais {
+    background-color: rgba(178, 34, 34, 0.08);
+    color: var(--kuro-primary);
+    font-weight: 600;
+}
+
+/* Etiqueta para el tiempo de preparación */
+.badge-tiempo {
+    background-color: rgba(224, 138, 30, 0.14);
+    color: #9A5B0D;
+    font-weight: 600;
+}
+
+/* Etiqueta verde para recetas publicadas */
+.badge-estado-pub {
+    background-color: rgba(74, 107, 72, 0.14);
+    color: var(--kuro-tertiary);
+    font-weight: 600;
+}
+
+/* Etiqueta neutra para recetas en borrador */
+.badge-estado-borr {
+    background-color: rgba(31, 25, 20, 0.08);
+    color: #5C524A;
+    font-weight: 600;
+}
+
+/* Botones para alternar entre tabla y tarjetas */
+.btn-view {
+    border: 1px solid var(--kuro-border);
+    color: #6B5E54;
+    background: var(--kuro-surface);
+}
+
+/* Botón activo del selector de vista */
+.btn-view.active {
+    background: var(--kuro-cream);
+    color: var(--kuro-neutral);
+    font-weight: 600;
+}
