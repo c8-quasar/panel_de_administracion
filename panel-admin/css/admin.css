@@ -26,7 +26,7 @@ body {
     color: var(--kuro-neutral);
 }
 
-/* Barra lateral fija en escritorio */
+/* Barra lateral de ancho fijo en escritorio"*/
 .sidebar {
     width: 260px;
     min-width: 260px;
@@ -328,4 +328,11 @@ body {
     background: var(--kuro-cream);
     color: var(--kuro-neutral);
     font-weight: 600;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #7A6E65;
+    padding: 1rem;
 }

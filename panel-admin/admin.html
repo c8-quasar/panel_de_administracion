@@ -74,16 +74,8 @@
                     <span class="fw-semibold text-dark">
                         <i class="bi bi-shield-check text-success-custom me-1"></i>Administrador
                     </span>
-                    <span class="badge bg-success-subtle text-success-custom rounded-pill">Sesión Activa —
-                        sessionStorage</span>
-                    <span class="text-muted d-none d-md-inline">
-                        <i class="bi bi-hdd-network me-1"></i>API: <code id="apiEndpointLabel"></code>
-                    </span>
+                    <span class="badge bg-success-subtle text-success-custom rounded-pill">Sesión Activa</span>
                 </div>
-                <button id="btnCerrarSesionTop"
-                    class="btn btn-sm btn-link text-danger-custom text-decoration-none fw-semibold p-0" type="button">
-                    <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
-                </button>
             </section>
 
             <!-- Mensajes de confirmación, error o validación -->
@@ -101,9 +93,6 @@
                 <div class="d-flex gap-2">
                     <button id="btnSincronizar" class="btn btn-outline-kuro" type="button">
                         <i class="bi bi-arrow-repeat me-1"></i>Sincronizar API
-                    </button>
-                    <button id="btnNuevaReceta" class="btn btn-primary-kuro" type="button">
-                        <i class="bi bi-plus-circle me-1"></i>Nueva Receta (+)
                     </button>
                 </div>
             </section>
@@ -281,7 +270,6 @@
                                 <select class="form-select" id="dificultad" required>
                                     <option value="Fácil">Fácil</option>
                                     <option value="Media">Media</option>
-                                    <option value="Intermedia">Intermedia</option>
                                     <option value="Avanzada">Avanzada</option>
                                 </select>
                             </div>
@@ -333,7 +321,7 @@
         </div>
     </div>
 
-    <footer class="visually-hidden">Panel administrativo de Kuro & Sésamo</footer>
+    <footer>Panel administrativo de Kuro & Sésamo</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/admin.js"></script>
