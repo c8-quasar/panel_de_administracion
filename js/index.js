@@ -1,4 +1,5 @@
-const API_URL = "https://panel-de-administracion.onrender.com/recetas";
+import { API_URL, obtenerRecetas, obtenerRecetaPorId } from "./api.js";
+
 const IMAGEN_POR_DEFECTO =
   "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80";
 
@@ -14,8 +15,6 @@ const IMAGEN_POR_DEFECTO =
   let currentFilter = "all";
   let searchQuery = "";
 
-  // Normaliza el nombre del país para que coincida con los data-filter de tus botones
-  // Ej: "Japón" -> "japon", "Corea del Sur" -> "corea"
   function obtenerSlugPais(pais = "") {
     const limpio = pais
       .toLowerCase()
@@ -30,7 +29,6 @@ const IMAGEN_POR_DEFECTO =
     return limpio;
   }
 
-  // Devuelve bandera y estilos de color según el país
   function obtenerEstiloPais(slug) {
     const estilos = {
       japon: {
@@ -63,19 +61,13 @@ const IMAGEN_POR_DEFECTO =
     );
   }
 
-  // 1. Consulta la API y renderiza las tarjetas publicadas
+  // 1. Consulta la API desde api.js y renderiza las tarjetas publicadas
   async function cargarRecetasPublicas() {
     if (!recipeGrid) return;
 
     try {
-      const respuesta = await fetch(API_URL);
-      if (!respuesta.ok) {
-        throw new Error(`Error HTTP ${respuesta.status}`);
-      }
+      const recetas = await obtenerRecetas();
 
-      const recetas = await respuesta.json();
-
-      // Filtra solo las recetas publicadas (si no tienen campo estado, las muestra igual)
       const publicadas = recetas.filter(
         (receta) => !receta.estado || receta.estado === "Publicado"
       );
@@ -90,7 +82,7 @@ const IMAGEN_POR_DEFECTO =
             No se pudo cargar el recetario en este momento
           </p>
           <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
-            Verifica que JSON Server esté ejecutándose en ${API_URL}
+            Verifica que la API esté activa en ${API_URL}
           </p>
         </div>
       `;
@@ -98,7 +90,7 @@ const IMAGEN_POR_DEFECTO =
     }
   }
 
-  // 2. Genera el HTML de cada tarjeta manteniendo tus clases y atributos data-*
+  // 2. Genera el HTML de cada tarjeta con botón de modal (sin receta.html)
   function renderizarTarjetas(listaRecetas) {
     recipeGrid.innerHTML = "";
 
@@ -164,22 +156,122 @@ const IMAGEN_POR_DEFECTO =
                 ${porciones} pers.
               </span>
             </div>
-            <a
-              class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn"
-              href="receta.html?id=${receta.id}"
+            <button
+              type="button"
+              data-ver-receta="${receta.id}"
+              class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn cursor-pointer"
             >
               <span>Ver Receta Completa</span>
               <span
                 class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform"
                 >arrow_forward</span
               >
-            </a>
+            </button>
           </div>
         </div>
       `;
 
       recipeGrid.appendChild(article);
     });
+
+    // Conectar el evento clic para abrir el modal de detalle usando api.js
+    recipeGrid.querySelectorAll("[data-ver-receta]").forEach((boton) => {
+      boton.addEventListener("click", () => abrirDetalleReceta(boton.dataset.verReceta));
+    });
+  }
+
+  // Abre un modal en index.html con los datos completos de la receta consultados por ID
+  async function abrirDetalleReceta(id) {
+    try {
+      const receta = await obtenerRecetaPorId(id);
+      const slugPais = obtenerSlugPais(receta.pais);
+      const estilo = obtenerEstiloPais(slugPais);
+      const tiempo = receta.tiempo || receta.tiempoMinutos || 30;
+      const porciones = receta.porciones || 2;
+
+      document.getElementById("modal-receta-kuro")?.remove();
+
+      const ingredientesHTML =
+        Array.isArray(receta.ingredientes) && receta.ingredientes.length > 0
+          ? `<div class="mt-4">
+              <h4 class="font-headline-sm text-base font-bold text-primary mb-2">Ingredientes</h4>
+              <ul class="list-disc pl-5 space-y-1 text-sm text-on-surface-variant">
+                ${receta.ingredientes.map((ing) => `<li>${ing}</li>`).join("")}
+              </ul>
+            </div>`
+          : "";
+
+      const pasosHTML =
+        Array.isArray(receta.pasos) && receta.pasos.length > 0
+          ? `<div class="mt-4">
+              <h4 class="font-headline-sm text-base font-bold text-primary mb-2">Preparación</h4>
+              <ol class="list-decimal pl-5 space-y-1.5 text-sm text-on-surface-variant">
+                ${receta.pasos.map((paso) => `<li>${paso}</li>`).join("")}
+              </ol>
+            </div>`
+          : "";
+
+      const modal = document.createElement("div");
+      modal.id = "modal-receta-kuro";
+      modal.className =
+        "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4";
+      modal.innerHTML = `
+        <div class="bg-surface-container-lowest text-on-surface max-w-2xl w-full rounded-2xl overflow-hidden shadow-2xl border border-outline-variant max-h-[90vh] flex flex-col">
+          <div class="relative h-60 shrink-0 bg-surface-container">
+            <img
+              src="${receta.imagen || IMAGEN_POR_DEFECTO}"
+              alt="${receta.titulo}"
+              onerror="this.src='${IMAGEN_POR_DEFECTO}'"
+              class="w-full h-full object-cover"
+            />
+            <button
+              id="cerrar-modal-receta"
+              type="button"
+              aria-label="Cerrar"
+              class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white font-bold flex items-center justify-center hover:bg-primary transition cursor-pointer"
+            >
+              ✕
+            </button>
+            <div class="absolute bottom-3 left-3">
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full ${estilo.clases} backdrop-blur-sm font-label-sm text-label-sm font-semibold">
+                <span>${estilo.bandera}</span> ${receta.pais}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-6 overflow-y-auto space-y-3">
+            <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-on-surface-variant">
+              <span class="flex items-center gap-1 text-secondary">
+                <span class="material-symbols-outlined text-[16px]">schedule</span> ${tiempo} min
+              </span>
+              <span class="flex items-center gap-1 text-on-tertiary-container">
+                <span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> ${receta.dificultad}
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">group</span> ${porciones} pers.
+              </span>
+            </div>
+
+            <h2 class="font-headline-md text-2xl font-bold text-on-surface">${receta.titulo}</h2>
+            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">${receta.descripcion}</p>
+
+            ${ingredientesHTML}
+            ${pasosHTML}
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.remove();
+      });
+      document
+        .getElementById("cerrar-modal-receta")
+        .addEventListener("click", () => modal.remove());
+    } catch (error) {
+      console.error("Error al cargar el detalle de la receta:", error);
+    }
   }
 
   // 3. Filtra sobre las tarjetas ya pintadas en el DOM
@@ -227,7 +319,6 @@ const IMAGEN_POR_DEFECTO =
     }
   }
 
-  // Eventos de los chips de filtro
   filterChips.forEach((chip) => {
     chip.addEventListener("click", () => {
       filterChips.forEach((c) => {
@@ -252,7 +343,6 @@ const IMAGEN_POR_DEFECTO =
     });
   });
 
-  // Eventos del buscador
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
       searchQuery = e.target.value;
@@ -276,7 +366,6 @@ const IMAGEN_POR_DEFECTO =
     });
   }
 
-  // Botón de restablecer filtros
   if (resetFiltersBtn) {
     resetFiltersBtn.addEventListener("click", () => {
       if (searchInput) searchInput.value = "";
@@ -307,6 +396,10 @@ const IMAGEN_POR_DEFECTO =
     });
   }
 
-  // Inicia la carga al abrir o recargar la página
-  document.addEventListener("DOMContentLoaded", cargarRecetasPublicas);
+  // Como es un módulo ES6, puede ejecutarse cuando el DOM ya está listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", cargarRecetasPublicas);
+  } else {
+    cargarRecetasPublicas();
+  }
 })();

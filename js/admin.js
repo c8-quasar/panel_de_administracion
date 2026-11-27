@@ -1,3 +1,12 @@
+import {
+    API_URL,
+    obtenerRecetas,
+    obtenerRecetaPorId,
+    crearReceta,
+    actualizarReceta,
+    eliminarRecetaPorId
+} from "./api.js";
+
 // 1. Verifica si existe sesión activa antes de mostrar el panel
 const sesionValida =
     sessionStorage.getItem("sesionAdmin") ||
@@ -7,8 +16,6 @@ if (sesionValida !== "activa") {
     window.location.href = "./login.html";
 }
 
-// URL de la API (cambiar por la URL HTTPS desplegada al publicar)
-const API_URL = "https://panel-de-administracion.onrender.com/recetas";
 const IMAGEN_POR_DEFECTO = "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80";
 
 let recetasCache = [];
@@ -97,16 +104,11 @@ function actualizarKPIs(lista) {
     kpiTiempo.textContent = Math.round(sumaTiempos / total);
 }
 
-// Consulta todos los registros desde JSON Server usando GET
+// Consulta todos los registros usando api.js
 async function cargarRecetas(notificar = false) {
     const inicio = performance.now();
     try {
-        const respuesta = await fetch(API_URL);
-        if (!respuesta.ok) {
-            throw new Error(`Error HTTP ${respuesta.status}`);
-        }
-
-        const datos = await respuesta.json();
+        const datos = await obtenerRecetas();
         const latencia = Math.round(performance.now() - inicio);
 
         recetasCache = datos;
@@ -141,7 +143,6 @@ recetaForm.addEventListener("submit", async (evento) => {
     const imagen = imagenInput.value.trim() || IMAGEN_POR_DEFECTO;
     const descripcion = descripcionInput.value.trim();
 
-    // Valida que los campos obligatorios no estén vacíos y que el tiempo sea válido
     if (!titulo || !pais || !tiempo || tiempo <= 0 || !descripcion) {
         mostrarAlerta("Completa todos los campos obligatorios (*) y asegúrate de ingresar un tiempo mayor a 0.", "warning");
         return;
@@ -150,17 +151,10 @@ recetaForm.addEventListener("submit", async (evento) => {
     const payload = { titulo, pais, tiempo, dificultad, estado, imagen, descripcion };
 
     try {
-        const url = id ? `${API_URL}/${id}` : API_URL;
-        const metodo = id ? "PUT" : "POST";
-
-        const respuesta = await fetch(url, {
-            method: metodo,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-
-        if (!respuesta.ok) {
-            throw new Error("No se pudo guardar el cambio en el servidor.");
+        if (id) {
+            await actualizarReceta(id, payload);
+        } else {
+            await crearReceta(payload);
         }
 
         recetaModal.hide();
@@ -183,15 +177,10 @@ function abrirModalCrear() {
     recetaModal.show();
 }
 
-// Consulta una receta por ID y llena el formulario para editarla
+// Consulta una receta por ID desde api.js y llena el formulario para editarla
 async function abrirModalEditar(id) {
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`);
-        if (!respuesta.ok) {
-            throw new Error("No se encontró la receta seleccionada.");
-        }
-
-        const receta = await respuesta.json();
+        const receta = await obtenerRecetaPorId(id);
         recetaIdInput.value = receta.id;
         tituloInput.value = receta.titulo;
         paisInput.value = receta.pais;
@@ -208,20 +197,13 @@ async function abrirModalEditar(id) {
     }
 }
 
-// Elimina un registro de JSON Server mediante DELETE
+// Elimina un registro usando api.js
 async function eliminarReceta(id) {
     const confirmar = confirm("¿Seguro que deseas eliminar esta receta?");
     if (!confirmar) return;
 
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!respuesta.ok) {
-            throw new Error("No se pudo eliminar la receta.");
-        }
-
+        await eliminarRecetaPorId(id);
         mostrarAlerta("Receta eliminada correctamente.", "success");
         await cargarRecetas();
     } catch (error) {
@@ -352,6 +334,11 @@ function verDetalle(id) {
     detalleModal.show();
 }
 
+// Exponer funciones al ámbito global para los atributos onclick del HTML
+window.verDetalle = verDetalle;
+window.abrirModalEditar = abrirModalEditar;
+window.eliminarReceta = eliminarReceta;
+
 // Eventos de botones, filtros y cambio de vista
 document.getElementById("btnNuevaReceta").addEventListener("click", abrirModalCrear);
 document.getElementById("navCrearBtn").addEventListener("click", abrirModalCrear);
@@ -391,14 +378,9 @@ const btnCerrarTop = document.getElementById("btnCerrarSesionTop");
 
 if (btnCerrarSidebar) {
     btnCerrarSidebar.addEventListener("click", cerrarSesion);
-} else {
-    console.warn("No se encontró el botón btnCerrarSesionSidebar");
 }
-
 if (btnCerrarTop) {
     btnCerrarTop.addEventListener("click", cerrarSesion);
-} else {
-    console.warn("No se encontró el botón btnCerrarSesionTop");
 }
 
 // Carga inicial al abrir el documento
