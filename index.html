@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Kuro &amp; Sésamo — Recetario Asiático</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"/>
+    
+    <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/tailwind-config.js"></script>
+  <link href="./css/index_styles.css" rel="stylesheet" />
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased">
+  <header
+    class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(43,33,24,0.04)]">
+    <div class="h-50 w-full px-gutter max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-space-md">
+        <img alt="Logo Kuro &amp; Sésamo" class=" object-contain rounded-full"
+          src="./img/logo.png" height="100" width="100"/>
+        <div class="flex flex-col">
+          <span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">Kuro &amp;
+            Sésamo</span><span
+            class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-0.5">Recetario
+            Asiático</span>
+        </div>
+      </div>
+      <nav class="hidden lg:flex items-center gap-space-lg"
+        data-active-classes="bg-surface-container-high text-primary font-bold rounded-lg px-space-md py-space-xs">
+        <a aria-current="page" class="transition-colors bg-surface-container-high text-primary font-bold rounded-lg px-space-md py-space-xs"
+          data-path="explorar-recetas" href="#">Explorar Recetas</a>
+          <a class="text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors"
+          data-path="paises-y-tradicion" href="#g">Países y Tradición</a>
+          <a
+          class="text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors"
+          data-path="tecnicas-culinarias" href="#t">Técnicas Culinarias</a>
+      </nav>
+      <div class="flex items-center gap-space-md">
+        <button aria-label="Buscar recetas"
+          class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors"
+          type="button">
+          <span class="material-symbols-outlined text-[20px]">search</span></button><a
+          class="hidden sm:inline-flex items-center gap-space-xs px-space-md py-space-xs rounded bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors"
+          data-path="acceso-admin" href="./pages/login.html"><span class="material-symbols-outlined text-[16px]">lock</span>Acceso
+          Admin</a>
+        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="w-full pt-20 bg-surface min-h-screen">
+    <div class="flex flex-col w-full">
+      <!-- Subtle ambient decorative glow behind hero -->
+      <div class="relative w-full overflow-hidden">
+        <div
+          class="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[480px] bg-gradient-to-b from-primary/5 via-secondary-container/10 to-transparent blur-3xl pointer-events-none -z-10">
+        </div>
+        <!-- Editorial Hero Section -->
+        <section class="max-w-7xl mx-auto px-gutter pt-space-xl pb-space-lg w-full">
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg">
+            <div class="max-w-3xl space-y-space-sm">
+              <div
+                class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Tradición Milenaria • Paso a Paso
+              </div>
+              <h1
+                class="font-headline-lg text-headline-lg lg:text-display text-on-surface leading-tight tracking-tight">
+                El arte de la cocina oriental en tu hogar
+              </h1>
+              <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Descubre preparaciones tradicionales de Japón, Tailandia,
+                Corea y China explicadas paso a paso con rigor y respeto por
+                los ingredientes.
+              </p>
+            </div>
+            <!-- Editorial Stamp / Stats Badge -->
+            <div
+              class="hidden lg:flex flex-col items-start bg-surface-container-low p-space-md rounded-xl shadow-sm min-w-[220px]">
+              <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Compendio
+                Culinario</span>
+              <div class="flex items-baseline gap-space-xs mt-1">
+                <span class="font-headline-md text-headline-md text-primary font-bold">148</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">fórmulas ancestrales</span>
+              </div>
+              <div class="flex items-center gap-space-xs mt-space-xs text-tertiary font-label-md text-label-md">
+                <span class="material-symbols-outlined text-[16px]">verified</span>
+                <span>Verificadas por maestros</span>
+              </div>
+            </div>
+          </div>
+          <!-- Search Box & Filter Bar -->
+          <div class="mt-space-xl bg-surface-container-lowest rounded-xl p-space-sm md:p-space-md shadow-md">
+            <div class="flex flex-col md:flex-row gap-space-sm items-stretch">
+              <div class="relative flex-1 flex items-center">
+                <span
+                  class="material-symbols-outlined absolute left-space-md text-on-surface-variant text-[22px]">search</span>
+                <input
+                  class="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-12 pr-space-md py-3 rounded-lg focus:outline-none focus:bg-surface transition-all placeholder:text-on-surface-variant/70"
+                  id="recipe-search-input" placeholder="Buscar receta por ingrediente, nombre o técnica..."
+                  type="text" />
+              </div>
+              <button
+                class="px-space-xl py-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm active:scale-95"
+                id="search-btn" type="button">
+                <span class="material-symbols-outlined text-[18px]">restaurant</span>
+                <span>Buscar</span>
+              </button>
+            </div>
+            <!-- Filter Chips Carousel/List -->
+            <div class="mt-space-md pt-space-sm flex items-center gap-space-xs overflow-x-auto pb-1 scrollbar-none">
+              <span
+                class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mr-space-xs whitespace-nowrap">Filtrar:</span>
+              <button
+                class="filter-chip active-filter px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-primary-container text-on-primary shadow-sm transition-all"
+                data-filter="all" type="button">
+                Todos
+              </button>
+              <button
+                class="filter-chip px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-surface-container hover:bg-surface-container-high text-on-surface transition-all"
+                data-filter="japon" type="button">
+                Japón 🇯🇵
+              </button>
+              <button
+                class="filter-chip px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-surface-container hover:bg-surface-container-high text-on-surface transition-all"
+                data-filter="tailandia" type="button">
+                Tailandia 🇹🇭
+              </button>
+              <button
+                class="filter-chip px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-surface-container hover:bg-surface-container-high text-on-surface transition-all"
+                data-filter="corea" type="button">
+                Corea del Sur 🇰🇷
+              </button>
+              <button
+                class="filter-chip px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-surface-container hover:bg-surface-container-high text-on-surface transition-all"
+                data-filter="china" type="button">
+                China 🇨🇳
+              </button>
+              <button
+                class="filter-chip px-space-md py-1.5 rounded-full font-label-md text-label-md whitespace-nowrap bg-surface-container hover:bg-surface-container-high text-on-surface transition-all"
+                data-filter="vietnam" type="button">
+                Vietnam 🇻🇳
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Main Catalog: Grid Layout -->
+      <section id="g" class="max-w-7xl mx-auto px-gutter py-space-lg w-full">
+        <div class="flex items-baseline justify-between mb-space-lg">
+          <div>
+            <h2  class="font-headline-md text-headline-md text-on-surface">
+              Recetas Destacadas
+            </h2>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">
+              Técnicas depuradas con instructivos detallados para replicar en
+              tu propia cocina
+            </p>
+          </div>
+          <span
+            class="font-label-md text-label-md text-on-surface-variant bg-surface-container-high px-space-sm py-1 rounded"
+            id="recipe-count">
+            4 preparaciones
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg" id="recipe-grid">
+          <!-- RECETA 1: Ramen Tonkotsu Clásico -->
+          <article
+            class="recipe-card flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+            data-country="japon" data-name="Ramen Tonkotsu Clásico caldo fideos chashu">
+            <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+              <img alt="Ramen Tonkotsu Clásico con chashu y huevo ajitsuke"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkniDGu3MNMB1BeaYwOjr1eeyvfRtXmSiHEi1fvtC7mhlc25Wz49MDp7U1hFkI7oG5OqRKDXuBBVTlUPRrjSTmU2tC3bfF1uterodzGhQKtU-P7_LTq05b06tKIj7ZgS8a9Fp26xdyXK6G00bQPNvc-3zwYeSBZXjEd4HJnesL546X9UZZnXSpek7i9x09lT35UYOnPt39uZKjFT3SbE8DDRzDmO7_3F1DNrytTJ0" />
+              <div class="absolute top-space-sm left-space-sm">
+                <span
+                  class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-tertiary-fixed-dim/90 backdrop-blur-sm text-tertiary font-label-sm text-label-sm font-semibold tracking-wide">
+                  <span>🇯🇵</span> Japón
+                </span>
+              </div>
+              <div
+                class="absolute bottom-space-sm right-space-sm bg-inverse-surface/80 backdrop-blur-sm text-inverse-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm">
+                Tonkotsu
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col flex-1 justify-between">
+              <div class="space-y-space-xs">
+                <h3
+                  class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Ramen Tonkotsu Clásico
+                </h3>
+                <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
+                  Caldo untuoso cocido a fuego lento durante horas, fideos
+                  alcalinos artesanales, chashu tierno, huevo ajitsuke
+                  marinado y cebollín fresco.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-sm space-y-space-sm">
+                <!-- Metadata badges -->
+                <div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+                  <span class="flex items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined text-[18px]">schedule</span>
+                    45 min
+                  </span>
+                  <span
+                    class="flex items-center gap-1 text-on-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">
+                    <span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+                    Intermedia
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">group</span>
+                    2 pers.
+                  </span>
+                </div>
+                <!-- Action Button -->
+                <a class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn"
+                  data-path="receta-ramen-tonkotsu" href="#">
+                  <span>Ver Receta Completa</span>
+                  <span
+                    class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </article>
+          <!-- RECETA 2: Pad Thai Tradicional con Langostinos -->
+          <article
+            class="recipe-card flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+            data-country="tailandia" data-name="Pad Thai Tradicional con Langostinos tamarindo wok noodles">
+            <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+              <img alt="Pad Thai al wok servido con langostinos, maní y lima"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuFg7zlkG8TcukhM8aTB8zgOdzO7rweaVYeoND-tPidcwSZ9Yi3LIzqz5xYwprc-WEWu0qavcXnb0grNJalWhytTEYFB0EX8IlBrthOrVNyYVT4wRL2U8V6f2tev7B1QzdHanzNR2smKPVs4UxtJQntCZspduWhJrNPX5xPpc_hjARymxDzVfVN-4vSDMoBlCdnXfP7XYvEnF1u9YKgTJZZr6YKrPI1F_TBxSKuy8" />
+              <div class="absolute top-space-sm left-space-sm">
+                <span
+                  class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-secondary-fixed/90 backdrop-blur-sm text-secondary font-label-sm text-label-sm font-semibold tracking-wide">
+                  <span>🇹🇭</span> Tailandia
+                </span>
+              </div>
+              <div
+                class="absolute bottom-space-sm right-space-sm bg-inverse-surface/80 backdrop-blur-sm text-inverse-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm">
+                Wok Express
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col flex-1 justify-between">
+              <div class="space-y-space-xs">
+                <h3
+                  class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Pad Thai Tradicional con Langostinos
+                </h3>
+                <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
+                  Fideos de arroz salteados al wok con salsa de tamarindo,
+                  tofu prensado, brotes de soya crujientes, maní triturado y
+                  lima.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-sm space-y-space-sm">
+                <!-- Metadata badges -->
+                <div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+                  <span class="flex items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined text-[18px]">schedule</span>
+                    25 min
+                  </span>
+                  <span class="flex items-center gap-1 text-tertiary bg-tertiary-fixed-dim/30 px-2 py-0.5 rounded">
+                    <span class="material-symbols-outlined text-[16px]">signal_cellular_alt_1_bar</span>
+                    Fácil
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">group</span>
+                    2 pers.
+                  </span>
+                </div>
+                <!-- Action Button -->
+                <a class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn"
+                  data-path="receta-pad-thai" href="#">
+                  <span>Ver Receta Completa</span>
+                  <span
+                    class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </article>
+          <!-- RECETA 3: Bibimbap con Salsa Gochujang -->
+          <article
+            class="recipe-card flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+            data-country="corea" data-name="Bibimbap con Salsa Gochujang coreano arroz bulgogi huevo shiitake">
+            <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+              <img alt="Bibimbap coreano servido con verduras variadas y huevo frito central"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV05HE6p-NqgnJg35OU9njxynYFX9AvlVto0r_ZPOq6jW6gaqu87e94ZXNYSfrDOGnurHHUg9ng6tEE3tzhsLJGI0YXbwtNJLjxqgj_lvowE1jszyVY24a4L0KlImqwUwzbh_lHoehSoFsGmrCDf7vsJZDKhCBfYhUQ0R5okfTekcSSPb0jTAT11ffLf-qFJ2NkqKGBXgf12n8y_RVxJexyj7DN7cXfZpJ-jIN_JE" />
+              <div class="absolute top-space-sm left-space-sm">
+                <span
+                  class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-fixed/90 backdrop-blur-sm text-primary font-label-sm text-label-sm font-semibold tracking-wide">
+                  <span>🇰🇷</span> Corea del Sur
+                </span>
+              </div>
+              <div
+                class="absolute bottom-space-sm right-space-sm bg-inverse-surface/80 backdrop-blur-sm text-inverse-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm">
+                Dolsot
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col flex-1 justify-between">
+              <div class="space-y-space-xs">
+                <h3
+                  class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Bibimbap con Salsa Gochujang
+                </h3>
+                <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
+                  Tazón de arroz blanco caliente con espinaca salteada, hongos
+                  shiitake, zanahoria, carne marinada al bulgogi y huevo frito
+                  con sésamo.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-sm space-y-space-sm">
+                <!-- Metadata badges -->
+                <div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+                  <span class="flex items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined text-[18px]">schedule</span>
+                    35 min
+                  </span>
+                  <span
+                    class="flex items-center gap-1 text-on-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">
+                    <span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+                    Media
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">group</span>
+                    1-2 pers.
+                  </span>
+                </div>
+                <!-- Action Button -->
+                <a class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn"
+                  data-path="receta-bibimbap" href="#">
+                  <span>Ver Receta Completa</span>
+                  <span
+                    class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </article>
+          <!-- RECETA 4: Baozis al Vapor de Cerdo y Jengibre -->
+          <article
+            class="recipe-card flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+            data-country="china" data-name="Baozis al Vapor de Cerdo y Jengibre Dim Sum masa vapor sésamo">
+            <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+              <img alt="Baozis al vapor esponjosos en canasta tradicional de bambú"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6feCGiRIangzHcbayqa6_yuUeu8KupZQKANxBqAySWEG6W-jhz8x3lhgCSUKBg1jKaiJxPP9NhXSWVICFYJrFq3F_YhNTlE0NhEt1kyfoFD3QPXgEVAM03T-whrLbIocflpzR_g3R-3VvBz5NW8NDqwwv6ddfpSxx9n8Ew1pVyeEYqsfURBMM5NTKm3V3qODOJpL9RE7IU_aOgUKxUmhGOqra2YxGTo9SUHRFuxQ" />
+              <div class="absolute top-space-sm left-space-sm">
+                <span
+                  class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-surface-container-high/90 backdrop-blur-sm text-on-surface font-label-sm text-label-sm font-semibold tracking-wide">
+                  <span>🇨🇳</span> China
+                </span>
+              </div>
+              <div
+                class="absolute bottom-space-sm right-space-sm bg-inverse-surface/80 backdrop-blur-sm text-inverse-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm">
+                Dim Sum
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col flex-1 justify-between">
+              <div class="space-y-space-xs">
+                <h3
+                  class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Baozis al Vapor de Cerdo y Jengibre
+                </h3>
+                <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
+                  Masa nube esponjosa al vapor rellena de panceta picada a
+                  mano, cebollín, jengibre fresco y toque de aceite de sésamo
+                  tostado.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-sm space-y-space-sm">
+                <!-- Metadata badges -->
+                <div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+                  <span class="flex items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined text-[18px]">schedule</span>
+                    50 min
+                  </span>
+                  <span class="flex items-center gap-1 text-primary bg-primary-fixed/30 px-2 py-0.5 rounded">
+                    <span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+                    Avanzada
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">group</span>
+                    4 pers.
+                  </span>
+                </div>
+                <!-- Action Button -->
+                <a class="w-full inline-flex items-center justify-between px-space-md py-2.5 rounded bg-surface-container hover:bg-primary-container text-on-surface hover:text-on-primary font-label-md text-label-md transition-all group/btn"
+                  data-path="receta-baozis-vapor" href="#">
+                  <span>Ver Receta Completa</span>
+                  <span
+                    class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <!-- Empty State for Searches -->
+        <div class="hidden py-space-xl flex-col items-center justify-center text-center" id="no-results">
+          <div
+            class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-space-sm">
+            <span class="material-symbols-outlined text-3xl">soup_kitchen</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface">
+            No encontramos recetas coincidentes
+          </h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm mt-1">
+            Prueba buscando con términos como "fideos", "arroz", "vapor" o
+            seleccionando otra región.
+          </p>
+          <button
+            class="mt-space-md px-space-md py-2 rounded bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors"
+            id="reset-filters-btn">
+            Restablecer filtros
+          </button>
+        </div>
+      </section>
+      <!-- Editorial Section: 'El Secreto del Umami' (Bento layout on rice-paper canvas) -->
+      <section id="t" class="max-w-7xl mx-auto px-gutter py-space-xl w-full">
+        <div class="bg-surface-container-low rounded-xl p-space-lg lg:p-space-xl shadow-sm relative overflow-hidden">
+          <!-- Decorative calligraphy accent watermark -->
+          <div
+            class="absolute -right-8 -bottom-10 opacity-5 pointer-events-none select-none text-9xl font-display font-bold text-on-surface">
+            旨味
+          </div>
+          <div class="max-w-2xl mb-space-lg">
+            <div
+              class="inline-flex items-center gap-space-xs text-secondary font-label-sm text-label-sm uppercase tracking-widest">
+              <span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+              Filosofía Gastronómica
+            </div>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mt-space-xs">
+              El Secreto del Umami
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+              La cocina de Asia Oriental no es una simple suma de
+              ingredientes; es una orquestación sutil de química natural,
+              fuego vivo y paciencia ancestral.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md relative z-10">
+            <!-- Pilar 1 -->
+            <div class="bg-surface-container-lowest p-space-lg rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div
+                class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed mb-space-md">
+                <span class="material-symbols-outlined text-[22px]">water_drop</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface">
+                1. Dashi y Fermentos
+              </h3>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs leading-relaxed">
+                Kombu curado, katsuobushi secado al sol y pastas fermentadas
+                como el miso y gochujang. La liberación de ácido glutámico
+                natural es el alma de cada caldo memorable.
+              </p>
+              <div
+                class="mt-space-md flex items-center gap-1 font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">
+                <span>Base de Caldos</span>
+                <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
+              </div>
+            </div>
+            <!-- Pilar 2 -->
+            <div class="bg-surface-container-lowest p-space-lg rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div
+                class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-space-md">
+                <span class="material-symbols-outlined text-[22px]">mode_heat</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface">
+                2. El 'Wok Hei'
+              </h3>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs leading-relaxed">
+                El "aliento del wok". A temperaturas extremas, la vaporización
+                de aceites y la caramelización relámpago impregnan fideos y
+                verduras con notas ahumadas inimitables.
+              </p>
+              <div
+                class="mt-space-md flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">
+                <span>Técnica del Fuego</span>
+                <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
+              </div>
+            </div>
+            <!-- Pilar 3 -->
+            <div class="bg-surface-container-lowest p-space-lg rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div
+                class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary mb-space-md">
+                <span class="material-symbols-outlined text-[22px]">balance</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface">
+                3. Cinco Sabores en Armonía
+              </h3>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs leading-relaxed">
+                Dulce, salado, ácido, amargo y umami. El contrapunto entre el
+                tamarindo ácido, la salsa de pescado profunda y la nuez
+                tostada del sésamo crea la experiencia perfecta.
+              </p>
+              <div
+                class="mt-space-md flex items-center gap-1 font-label-sm text-label-sm text-tertiary font-semibold uppercase tracking-wider">
+                <span>Equilibrio Zen</span>
+                <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Interactive Taste Profile Infographic / Quick Guide -->
+      <section class="max-w-7xl mx-auto px-gutter pb-space-xl w-full">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center bg-surface-container-high/40 rounded-xl p-space-lg lg:p-space-xl">
+          <div class="lg:col-span-5 space-y-space-sm">
+            <span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-bold">Despensa
+              Esencial</span>
+            <h3 class="font-headline-md text-headline-md text-on-surface">
+              ¿Listo para encender los quemadores?
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              Cada receta incluye sustitutos accesibles para que logres la
+              fidelidad del sabor tradicional utilizando ingredientes de tu
+              mercado local.
+            </p>
+            <div class="pt-space-xs flex flex-wrap gap-2">
+              <span
+                class="px-space-sm py-1 bg-surface-container-lowest rounded-full font-label-sm text-label-sm text-on-surface">Salsa
+                de Soya Shoyu</span>
+              <span
+                class="px-space-sm py-1 bg-surface-container-lowest rounded-full font-label-sm text-label-sm text-on-surface">Mirin
+                &amp; Sake</span>
+              <span
+                class="px-space-sm py-1 bg-surface-container-lowest rounded-full font-label-sm text-label-sm text-on-surface">Aceite
+                de Sésamo Puro</span>
+              <span
+                class="px-space-sm py-1 bg-surface-container-lowest rounded-full font-label-sm text-label-sm text-on-surface">Vinagre
+                de Chinkiang</span>
+            </div>
+          </div>
+          <div class="lg:col-span-7 flex flex-col sm:flex-row gap-space-md items-center justify-end">
+            <div
+              class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center gap-space-md w-full sm:w-auto">
+              <span class="material-symbols-outlined text-3xl text-secondary">ramen_dining</span>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-on-surface">
+                  Fideos Artesanales
+                </div>
+                <div class="font-body-sm text-body-sm text-on-surface-variant">
+                  Udon, Soba, Ramen &amp; Vermicelli
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center gap-space-md w-full sm:w-auto">
+              <span class="material-symbols-outlined text-3xl text-tertiary">soup_kitchen</span>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-on-surface">
+                  Vaporeras Bambú
+                </div>
+                <div class="font-body-sm text-body-sm text-on-surface-variant">
+                  Cocción suave &amp; fragante
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Admin & Curators CTA Banner -->
+      <section class="max-w-7xl mx-auto px-gutter pb-space-xl w-full">
+        <div
+          class="w-full bg-inverse-surface text-inverse-on-surface rounded-xl p-space-lg lg:p-space-xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-space-lg relative overflow-hidden">
+          <!-- Ambient corner glow -->
+          <div class="absolute -top-12 -left-12 w-48 h-48 bg-primary/20 rounded-full blur-2xl pointer-events-none">
+          </div>
+          <div class="space-y-space-xs max-w-2xl relative z-10">
+            <div
+              class="inline-flex items-center gap-space-xs text-primary-fixed font-label-sm text-label-sm uppercase tracking-widest">
+              <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+              Área de Redacción y Maestros Cocineros
+            </div>
+            <h2 class="font-headline-md text-headline-md text-surface-container-lowest">
+              ¿Gestionas recetas o técnicas culinarias?
+            </h2>
+            <p class="font-body-sm text-body-sm text-inverse-on-surface/80">
+              Accede al panel administrativo para publicar nuevas entradas
+              gastronómicas, editar proporciones, sincronizar ingredientes y
+              ordenar pasos fotográficos.
+            </p>
+          </div>
+          <div class="flex items-center gap-space-md relative z-10 w-full md:w-auto">
+            <a class="w-full md:w-auto inline-flex items-center justify-center gap-space-xs px-space-xl py-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg shadow-md transition-colors whitespace-nowrap"
+              data-path="acceso-admin" href="#">
+              <span class="material-symbols-outlined text-[20px]">tune</span>
+              <span>Panel de Administración</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="./js/index.js"></script>
+  </main>
+  <footer class="w-full bg-surface-container-low shadow-[0_-1px_4px_rgba(43,33,24,0.02)]">
+    <div class="w-full max-w-7xl mx-auto px-gutter py-space-xl flex flex-col gap-space-lg">
+      <div
+        class="flex flex-col md:flex-row items-center justify-between gap-space-md pb-space-lg border-b border-surface-container-high">
+        <div class="flex items-center gap-space-sm">
+          <img alt="Logo Kuro &amp; Sésamo" class="h-8 w-8 object-contain rounded-full opacity-80"
+            src="./img/logo.png" /><span
+            class="font-headline-sm text-headline-sm text-on-surface">Kuro &amp; Sésamo</span><span
+            class="font-body-sm text-body-sm text-on-surface-variant ml-space-xs italic">— Recetas milenarias, paso a
+            paso.</span>
+        </div>
+        <nav class="flex items-center gap-space-lg">
+          <a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors"
+            data-path="guia-de-ingredientes" href="#">Guía de Ingredientes</a><a
+            class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors"
+            data-path="contacto" href="#">Contacto</a>
+        </nav>
+      </div>
+      <div
+        class="flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+        <p>
+          © 2025 Kuro &amp; Sésamo — Cocina Tradicional Asiática. Todos los
+          derechos reservados.
+        </p>
+        <div class="flex items-center gap-space-md">
+          <span
+            class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary cursor-pointer transition-colors">ramen_dining</span><span
+            class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary cursor-pointer transition-colors">menu_book</span><span
+            class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary cursor-pointer transition-colors">local_cafe</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

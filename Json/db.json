@@ -1,0 +1,54 @@
+{
+  "recetas": [
+    {
+      "id": "1",
+      "titulo": "Ramen Tonkotsu Clásico",
+      "descripcion": "Caldo espeso de cerdo cocido a fuego lento durante horas, fideos alcalinos artesanales, chashu tierno y huevo.",
+      "pais": "Japón",
+      "tiempo": 45,
+      "dificultad": "Intermedia",
+      "estado": "Publicado",
+      "imagen": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&q=80"
+    },
+    {
+      "id": "2",
+      "titulo": "Pad Thai Tradicional con Langostinos",
+      "descripcion": "Salteado al wok con salsa de tamarindo, tofu prensado, brotes de soya crujientes y maní.",
+      "pais": "Tailandia",
+      "tiempo": 25,
+      "dificultad": "Fácil",
+      "estado": "Publicado",
+      "imagen": "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80"
+    },
+    {
+      "id": "3",
+      "titulo": "Bibimbap con Salsa Gochujang",
+      "descripcion": "Cuenco de arroz blanco caliente con espinaca salteada, hongos shiitake, zanahoria y carne marinada.",
+      "pais": "Corea del Sur",
+      "tiempo": 35,
+      "dificultad": "Media",
+      "estado": "Publicado",
+      "imagen": "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&q=80"
+    },
+    {
+      "id": "4",
+      "titulo": "Baozis al Vapor de Cerdo y Jengibre",
+      "descripcion": "Bollos sedosos fermentados al vapor rellenos de panceta picada a mano, cebollín y jengibre fresco.",
+      "pais": "China",
+      "tiempo": 50,
+      "dificultad": "Avanzada",
+      "estado": "Publicado",
+      "imagen": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&q=80"
+    },
+    {
+      "titulo": "tteokbokki",
+      "pais": "Corea del Sur",
+      "tiempo": 20,
+      "dificultad": "Fácil",
+      "estado": "Publicado",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwoMYRH42UFn1ZbcKjSsLQx34qyywLD9-z0g1BLdXIaQ&s=10",
+      "descripcion": "Para preparar tteokbokki clásico (unas 2-3 raciones), necesitas pasteles de arroz coreanos, una base de caldo y condimentos agridulces y picantes",
+      "id": "H8XnbYK"
+    }
+  ]
+}
