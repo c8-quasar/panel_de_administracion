@@ -8,7 +8,7 @@ if (sesionValida !== "activa") {
 }
 
 // URL de la API (cambiar por la URL HTTPS desplegada al publicar)
-const API_URL = "http://localhost:3000/recetas";
+const API_URL = "https://panel-de-administracion.onrender.com/recetas";
 const IMAGEN_POR_DEFECTO = "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80";
 
 let recetasCache = [];

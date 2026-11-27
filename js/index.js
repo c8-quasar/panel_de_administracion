@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/recetas";
+const API_URL = "https://panel-de-administracion.onrender.com/recetas";
 const IMAGEN_POR_DEFECTO =
   "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80";
 
