@@ -13,7 +13,7 @@ const sesionValida =
     localStorage.getItem("sesionAdmin");
 
 if (sesionValida !== "activa") {
-    window.location.href = "./login.html";
+    window.location.href = "../login.html";
 }
 
 const IMAGEN_POR_DEFECTO = "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80";
@@ -54,7 +54,9 @@ const estadoInput = document.getElementById("estado");
 const imagenInput = document.getElementById("imagen");
 const descripcionInput = document.getElementById("descripcion");
 
-apiEndpointLabel.textContent = API_URL;
+if (apiEndpointLabel) {
+    apiEndpointLabel.textContent = API_URL;
+}
 
 // Muestra mensajes de éxito, advertencia o error en pantalla
 function mostrarAlerta(mensaje, tipo = "success") {
@@ -74,7 +76,7 @@ function mostrarAlerta(mensaje, tipo = "success") {
 
     setTimeout(() => {
         alertaContainer.innerHTML = "";
-    }, 4500);
+    }, 5500);
 }
 
 // Calcula los indicadores a partir de las recetas cargadas
@@ -95,7 +97,7 @@ function actualizarKPIs(lista) {
 
     lista.forEach((receta) => {
         conteoPaises[receta.pais] = (conteoPaises[receta.pais] || 0) + 1;
-        sumaTiempos += Number(receta.tiempo) || 0;
+        sumaTiempos += Number(receta.tiempo ?? receta.tiempoMinutos) || 0;
     });
 
     const paisTop = Object.entries(conteoPaises).sort((a, b) => b[1] - a[1])[0];
@@ -106,6 +108,9 @@ function actualizarKPIs(lista) {
 
 // Consulta todos los registros usando api.js
 async function cargarRecetas(notificar = false) {
+    serverStatusText.textContent = "Conectando...";
+    serverLatencyText.textContent = "Consultando Render (puede tardar ~30s si estaba en reposo)...";
+
     const inicio = performance.now();
     try {
         const datos = await obtenerRecetas();
@@ -125,12 +130,12 @@ async function cargarRecetas(notificar = false) {
     } catch (error) {
         serverStatusDot.classList.add("offline");
         serverStatusText.textContent = "Sin conexión";
-        serverLatencyText.textContent = "Revisa que JSON Server esté activo";
+        serverLatencyText.textContent = "Pulsa 'Sincronizar API' para reintentar";
         mostrarAlerta(`No se pudieron cargar las recetas: ${error.message}`, "danger");
     }
 }
 
-// Envía el formulario para crear una receta (POST) o actualizarla (PUT)
+// Envía el formulario para crear una receta (POST) o actualizarla (PATCH)
 recetaForm.addEventListener("submit", async (evento) => {
     evento.preventDefault();
 
@@ -184,7 +189,7 @@ async function abrirModalEditar(id) {
         recetaIdInput.value = receta.id;
         tituloInput.value = receta.titulo;
         paisInput.value = receta.pais;
-        tiempoInput.value = receta.tiempo;
+        tiempoInput.value = receta.tiempo ?? receta.tiempoMinutos ?? "";
         dificultadInput.value = receta.dificultad;
         estadoInput.value = receta.estado || "Publicado";
         imagenInput.value = receta.imagen || "";
@@ -218,9 +223,9 @@ function aplicarFiltrosYRenderizar() {
 
     const filtradas = recetasCache.filter((receta) => {
         const coincideTexto =
-            receta.titulo.toLowerCase().includes(texto) ||
-            receta.pais.toLowerCase().includes(texto) ||
-            receta.dificultad.toLowerCase().includes(texto);
+            (receta.titulo || "").toLowerCase().includes(texto) ||
+            (receta.pais || "").toLowerCase().includes(texto) ||
+            (receta.dificultad || "").toLowerCase().includes(texto);
 
         const coincidePais = paisSeleccionado === "TODOS" || receta.pais === paisSeleccionado;
         return coincideTexto && coincidePais;
@@ -247,10 +252,13 @@ function renderizarTabla(lista) {
     }
 
     lista.forEach((receta) => {
+        const estadoActual = receta.estado || "Publicado";
         const badgeEstado =
-            receta.estado === "Publicado"
+            estadoActual === "Publicado"
                 ? `<span class="badge rounded-pill badge-estado-pub">• Publicado</span>`
                 : `<span class="badge rounded-pill badge-estado-borr">• Borrador</span>`;
+
+        const tiempoMostrar = receta.tiempo ?? receta.tiempoMinutos ?? 0;
 
         const fila = document.createElement("tr");
         fila.innerHTML = `
@@ -264,7 +272,7 @@ function renderizarTabla(lista) {
         </div>
       </td>
       <td><span class="badge rounded-pill badge-pais">• ${receta.pais}</span></td>
-      <td><span class="badge rounded-pill badge-tiempo"><i class="bi bi-clock me-1"></i>${receta.tiempo} min</span></td>
+      <td><span class="badge rounded-pill badge-tiempo"><i class="bi bi-clock me-1"></i>${tiempoMostrar} min</span></td>
       <td><span class="badge bg-light text-dark border">${receta.dificultad}</span></td>
       <td>${badgeEstado}</td>
       <td class="text-end text-nowrap">
@@ -288,6 +296,7 @@ function renderizarTarjetas(lista) {
     contenedorTarjetas.innerHTML = "";
 
     lista.forEach((receta) => {
+        const tiempoMostrar = receta.tiempo ?? receta.tiempoMinutos ?? 0;
         const columna = document.createElement("div");
         columna.className = "col-md-6 col-xl-3";
         columna.innerHTML = `
@@ -297,7 +306,7 @@ function renderizarTarjetas(lista) {
           <div>
             <div class="d-flex justify-content-between mb-2">
               <span class="badge rounded-pill badge-pais">${receta.pais}</span>
-              <span class="badge rounded-pill badge-tiempo">${receta.tiempo} min</span>
+              <span class="badge rounded-pill badge-tiempo">${tiempoMostrar} min</span>
             </div>
             <h6 class="page-title fw-bold">${receta.titulo}</h6>
             <p class="text-muted small mb-3">${receta.descripcion}</p>
@@ -321,12 +330,14 @@ function verDetalle(id) {
     const receta = recetasCache.find((item) => String(item.id) === String(id));
     if (!receta) return;
 
+    const tiempoMostrar = receta.tiempo ?? receta.tiempoMinutos ?? 0;
+
     document.getElementById("detalleTitulo").textContent = receta.titulo;
     document.getElementById("detalleContenido").innerHTML = `
     <img src="${receta.imagen || IMAGEN_POR_DEFECTO}" alt="${receta.titulo}" class="img-fluid rounded-3 mb-3 w-100" style="max-height: 220px; object-fit: cover;">
     <div class="d-flex gap-2 mb-3">
       <span class="badge rounded-pill badge-pais">${receta.pais}</span>
-      <span class="badge rounded-pill badge-tiempo">${receta.tiempo} min</span>
+      <span class="badge rounded-pill badge-tiempo">${tiempoMostrar} min</span>
       <span class="badge bg-light text-dark border">${receta.dificultad}</span>
     </div>
     <p class="text-muted mb-0">${receta.descripcion}</p>
@@ -339,49 +350,63 @@ window.verDetalle = verDetalle;
 window.abrirModalEditar = abrirModalEditar;
 window.eliminarReceta = eliminarReceta;
 
-// Eventos de botones, filtros y cambio de vista
-document.getElementById("btnNuevaReceta").addEventListener("click", abrirModalCrear);
-document.getElementById("navCrearBtn").addEventListener("click", abrirModalCrear);
-document.getElementById("btnSincronizar").addEventListener("click", () => cargarRecetas(true));
+// Eventos de botones, filtros y cambio de vista (protegidos contra nulos)
+const btnNuevaReceta = document.getElementById("btnNuevaReceta");
+if (btnNuevaReceta) {
+    btnNuevaReceta.addEventListener("click", abrirModalCrear);
+}
 
-inputBuscar.addEventListener("input", aplicarFiltrosYRenderizar);
-filtroPais.addEventListener("change", aplicarFiltrosYRenderizar);
+const navPanelBtn = document.getElementById("navPanelBtn");
+if (navPanelBtn) {
+    navPanelBtn.addEventListener("click", () => {
+        contenedorTabla.scrollIntoView({ behavior: "smooth" });
+    });
+}
+
+const btnSincronizar = document.getElementById("btnSincronizar");
+if (btnSincronizar) {
+    btnSincronizar.addEventListener("click", () => cargarRecetas(true));
+}
+
+if (inputBuscar) {
+    inputBuscar.addEventListener("input", aplicarFiltrosYRenderizar);
+}
+if (filtroPais) {
+    filtroPais.addEventListener("change", aplicarFiltrosYRenderizar);
+}
 
 const btnVistaTabla = document.getElementById("btnVistaTabla");
 const btnVistaTarjetas = document.getElementById("btnVistaTarjetas");
 
-btnVistaTabla.addEventListener("click", () => {
-    vistaActual = "tabla";
-    btnVistaTabla.classList.add("active");
-    btnVistaTarjetas.classList.remove("active");
-    contenedorTabla.classList.remove("d-none");
-    contenedorTarjetas.classList.add("d-none");
-});
+if (btnVistaTabla && btnVistaTarjetas) {
+    btnVistaTabla.addEventListener("click", () => {
+        vistaActual = "tabla";
+        btnVistaTabla.classList.add("active");
+        btnVistaTarjetas.classList.remove("active");
+        contenedorTabla.classList.remove("d-none");
+        contenedorTarjetas.classList.add("d-none");
+    });
 
-btnVistaTarjetas.addEventListener("click", () => {
-    vistaActual = "tarjetas";
-    btnVistaTarjetas.classList.add("active");
-    btnVistaTabla.classList.remove("active");
-    contenedorTarjetas.classList.remove("d-none");
-    contenedorTabla.classList.add("d-none");
-});
+    btnVistaTarjetas.addEventListener("click", () => {
+        vistaActual = "tarjetas";
+        btnVistaTarjetas.classList.add("active");
+        btnVistaTabla.classList.remove("active");
+        contenedorTarjetas.classList.remove("d-none");
+        contenedorTabla.classList.add("d-none");
+    });
+}
 
 // Borra los datos de sesión de ambos almacenamientos y regresa al inicio de sesión
 function cerrarSesion() {
     sessionStorage.removeItem("sesionAdmin");
     localStorage.removeItem("sesionAdmin");
-    window.location.href = "./login.html";
+    window.location.href = "../login.html";
 }
 
 const btnCerrarSidebar = document.getElementById("btnCerrarSesionSidebar");
-const btnCerrarTop = document.getElementById("btnCerrarSesionTop");
-
 if (btnCerrarSidebar) {
     btnCerrarSidebar.addEventListener("click", cerrarSesion);
 }
-if (btnCerrarTop) {
-    btnCerrarTop.addEventListener("click", cerrarSesion);
-}
 
-// Carga inicial al abrir el documento
-document.addEventListener("DOMContentLoaded", () => cargarRecetas(false));
+// Carga inicial inmediata al abrir el módulo
+cargarRecetas(false);
