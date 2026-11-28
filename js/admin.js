@@ -400,13 +400,31 @@ if (btnVistaTabla && btnVistaTarjetas) {
 function cerrarSesion() {
     sessionStorage.removeItem("sesionAdmin");
     localStorage.removeItem("sesionAdmin");
-    window.location.href = "../login.html";
+    // Reemplaza la entrada del historial para que 'Atrás' no regrese al panel
+    window.location.replace("./login.html");
 }
 
 const btnCerrarSidebar = document.getElementById("btnCerrarSesionSidebar");
 if (btnCerrarSidebar) {
     btnCerrarSidebar.addEventListener("click", cerrarSesion);
 }
+function verificarSesion() {
+    const sesionValida =
+        sessionStorage.getItem("sesionAdmin") ||
+        localStorage.getItem("sesionAdmin");
+
+    if (sesionValida !== "activa") {
+        window.location.replace("./login.html");
+    }
+}
+
+// Se ejecuta al cargar por primera vez y también si el usuario presiona "Atrás"
+verificarSesion();
+window.addEventListener("pageshow", (evento) => {
+    if (evento.persisted) {
+        verificarSesion();
+    }
+});
 
 // Carga inicial inmediata al abrir el módulo
 cargarRecetas(false);
